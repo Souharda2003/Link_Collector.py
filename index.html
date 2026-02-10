@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Link Collector</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Poppins", Arial, sans-serif;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      position: relative;
+    }
+
+
+    .animated-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(-45deg, #6a11cb, #2575fc, #43e97b, #38f9d7);
+      background-size: 400% 400%;
+      animation: gradientMove 12s ease infinite;
+      z-index: -2;
+    }
+
+    @keyframes gradientMove {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    .particles {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: -1;
+    }
+
+    .particles span {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: rgba(255, 255, 255, 0.4);
+      border-radius: 50%;
+      bottom: -10px;
+      animation: floatUp 10s linear infinite;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) scale(1);
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(-110vh) scale(0.5);
+        opacity: 0;
+      }
+    }
+
+    .particles span:nth-child(1) { left: 10%; animation-duration: 12s; animation-delay: 0s; }
+    .particles span:nth-child(2) { left: 25%; animation-duration: 15s; animation-delay: 2s; }
+    .particles span:nth-child(3) { left: 40%; animation-duration: 18s; animation-delay: 4s; }
+    .particles span:nth-child(4) { left: 60%; animation-duration: 20s; animation-delay: 1s; }
+    .particles span:nth-child(5) { left: 75%; animation-duration: 13s; animation-delay: 3s; }
+    .particles span:nth-child(6) { left: 85%; animation-duration: 16s; animation-delay: 5s; }
+
+    .container {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(15px);
+      border-radius: 18px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+      padding: 40px 45px;
+      width: 360px;
+      text-align: center;
+      transition: all 0.3s ease-in-out;
+    }
+
+    .container:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+    }
+
+    h2 {
+      color: #fff;
+      margin-bottom: 20px;
+      font-size: 1.7em;
+      letter-spacing: 0.5px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px 14px;
+      border: none;
+      border-radius: 10px;
+      font-size: 1em;
+      outline: none;
+      margin-bottom: 15px;
+    }
+
+    input:focus {
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+    }
+
+    button {
+      background: linear-gradient(90deg, #007bff, #6610f2);
+      border: none;
+      color: #fff;
+      padding: 12px 0;
+      border-radius: 10px;
+      cursor: pointer;
+      width: 100%;
+      font-size: 1em;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background: linear-gradient(90deg, #0056b3, #520dc2);
+      transform: translateY(-2px);
+    }
+
+    .popup-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+
+    .popup {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 30px 40px;
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.2);
+      animation: fadeIn 0.3s ease;
+      max-width: 300px;
+      color: #333;
+    }
+
+    .popup.success h3 {
+      color: #28a745;
+    }
+
+    .popup.error h3 {
+      color: #dc3545;
+    }
+
+    .popup button {
+      background: linear-gradient(90deg, #007bff, #6610f2);
+      border: none;
+      color: #fff;
+      padding: 8px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: 0.3s;
+    }
+
+    .popup button:hover {
+      background: linear-gradient(90deg, #0056b3, #520dc2);
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+  </style>
+</head>
+
+<body>
+ 
+  <div class="animated-bg"></div>
+  <div class="particles">
+    <span></span><span></span><span></span><span></span><span></span><span></span>
+  </div>
+
+  <div class="container">
+    <h2>🔗 Link Collector</h2>
+    <input type="text" id="urlInput" placeholder="Enter website URL" />
+    <button onclick="generateLinks()">Generate Links</button>
+  </div>
+
+  <div class="popup-overlay" id="popupOverlay">
+    <div class="popup" id="popupBox">
+      <h3 id="popupTitle">Title</h3>
+      <p id="popupMessage">Message here</p>
+      <button onclick="closePopup()">OK</button>
+    </div>
+  </div>
+
+  <script>
+   
+    function showPopup(type, title, message) {
+      const popupOverlay = document.getElementById("popupOverlay");
+      const popupBox = document.getElementById("popupBox");
+      document.getElementById("popupTitle").innerText = title;
+      document.getElementById("popupMessage").innerText = message;
+      popupBox.className = "popup " + type;
+      popupOverlay.style.display = "flex";
+    }
+
+    function closePopup() {
+      document.getElementById("popupOverlay").style.display = "none";
+    }
+
+    async function generateLinks() {
+      const url = document.getElementById("urlInput").value.trim();
+      if (!url) {
+        showPopup("error", "Invalid URL", "Please enter a valid website link!");
+        return;
+      }
+
+      try {
+        const response = await fetch("/generate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ url }),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          showPopup("error", "Failed", errorData.error || "Unable to generate links.");
+          return;
+        }
+
+        const blob = await response.blob();
+        const downloadUrl = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = downloadUrl;
+        a.download = "links.pdf";
+        a.click();
+        window.URL.revokeObjectURL(downloadUrl);
+
+        showPopup("success", "Success!", "Links generated and downloaded successfully.");
+      } catch (error) {
+        showPopup("error", "Error", "An error occurred while generating links.");
+      }
+    }
+  </script>
+</body>
+</html>
